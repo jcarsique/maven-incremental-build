@@ -38,17 +38,16 @@ package org.jvnet.mavenincrementalbuild;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.apache.maven.model.Dependency;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.SelectorUtils;
@@ -63,13 +62,6 @@ import org.jvnet.mavenincrementalbuild.utils.TimestampsManager;
  * @requiresDependencyResolution test
  */
 public class IncrementalBuildMojo extends AbstractMojo {
-	/**
-	 * 
-	 * @parameter default-value="${project.dependencies}"
-	 * @required
-	 * @readonly
-	 */
-	private Collection dependencies;
 
 	/**
 	 * The Maven project.
@@ -79,24 +71,6 @@ public class IncrementalBuildMojo extends AbstractMojo {
 	 * @readonly
 	 */
 	private MavenProject project;
-
-	/**
-	 * 
-	 * @parameter default-value="${project.artifacts}"
-	 * @required
-	 * @readonly
-	 */
-	private Collection artifacts;
-
-	/**
-	 * Helper class to assist in attaching artifacts to the project instance.
-	 * project-helper instance, used to make addition of resources simpler.
-	 * 
-	 * @component
-	 * @required
-	 * @readonly
-	 */
-	private MavenProjectHelper projectHelper;
 
 	/**
 	 * Dependencies from the reactor. This attribute is a singleton for the
@@ -156,8 +130,10 @@ public class IncrementalBuildMojo extends AbstractMojo {
 	 * check if files in source directory are more recent than files on target
 	 * directory.
 	 * 
-	 * @param sourceDirectory base directory
-	 * @param targetDirectory the generated directory 
+	 * @param sourceDirectory
+	 *            base directory
+	 * @param targetDirectory
+	 *            the generated directory
 	 * @return true if a file in target directory is more recent than files in
 	 *         source directory, false otherwise
 	 */
@@ -327,13 +303,13 @@ public class IncrementalBuildMojo extends AbstractMojo {
 	private boolean parentUpdated() {
 		getLog().info("Verifying parent modules...");
 
-		List<Dependency> dependencies = (List<Dependency>) project
-				.getDependencies();
+		Set<Artifact> artifacts = (Set<Artifact>) project
+				.getArtifacts();
 
-		for (Dependency dependency : dependencies) {
-			String groupId = dependency.getGroupId();
-			String artifactId = dependency.getArtifactId();
-			String version = dependency.getVersion();
+		for (Artifact artifact : artifacts) {
+			String groupId = artifact.getGroupId();
+			String artifactId = artifact.getArtifactId();
+			String version = artifact.getVersion();
 
 			ModuleIdentifier identifier = new ModuleIdentifier(groupId,
 					artifactId, version);
