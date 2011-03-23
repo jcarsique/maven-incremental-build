@@ -1,0 +1,68 @@
+ ------
+ Usage
+ ------
+ Vincent Sellier
+ ------
+ January 14th, 2008
+
+Introduction
+
+  Because it looks for modification on modules of an unique project, the Maven Incremental Plugin takes it sens only on multi modules projects. 
+  If modification on a module is detected, the output directory is removed.
+
+* Using the plugin
+
+  You have two way to use the plugin:
+
+  [[1]] checkout the sources from subversion and execute an <<<mvn install>>> to install it on you local repository
+  
+  [[2]] The plugin is deployed into the central maven repository via the OSS repository provide by Sonatype. You just have to attach the plugin using the following xml.
+
+* Attach the plugin to the project lifecycle
+
+  To be efficient the plugin must be executed at the beginning of the compilation phase. To achieve this, you have to add this on the parent pom of you project :
+  
++-----
+  <project>
+  	[...]
+  	<build>
+  		[...]
+		<plugins>
+			[...]
+			<plugin>
+				<groupId>net.java.incremental-build-plugin</groupId>
+				<artifactId>incremental-build-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>incremental-build</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			[...]
+		</plugins>
+		[...]
+	</build>
+	[...]
+  </project>
++----- 
+
+* Deactivate the plugin
+
+  You can skip the plugin execution setting the variable noIncrementalBuild to true :
+
++-----
+[vincent@localhost base]$ mvn compile -DnoIncrementalBuild
+[...]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building incremental-build-plugin Maven Mojo Base Test
+[INFO]    task-segment: [compile]
+[INFO] ------------------------------------------------------------------------
+[INFO] [incremental-build:incremental-build {execution: default}]
+[INFO] Incremental build deactivated.
+[INFO] ------------------------------------------------------------------------
+[...]
++-----
+
+
