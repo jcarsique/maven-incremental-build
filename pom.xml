@@ -18,9 +18,9 @@
     </description>
     <url>http://java.net/projects/maven-incremental-build</url>
     <scm>
-        <connection>scm:svn:https//svn.java.net/svn/maven-incremental-build~svn/tags/incremental-build-plugin-1.5</connection>
+        <connection>scm:svn:https://svn.java.net/svn/maven-incremental-build~svn/tags/incremental-build-plugin-1.5</connection>
         <developerConnection>scm:svn:https://svn.java.net/svn/maven-incremental-build~svn/tags/incremental-build-plugin-1.5</developerConnection>
-        <url>http://java.net/projects/maven-incremental-build/sources/svn/show/tags/incremental-build-plugin-1.5</url>
+        <url>https://java.net/projects/maven-incremental-build/sources/svn/show/tags/incremental-build-plugin-1.5</url>
     </scm>
     <inceptionYear>2007</inceptionYear>
     <mailingLists>
@@ -188,7 +188,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.0-beta-3</version>
+                <version>3.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
